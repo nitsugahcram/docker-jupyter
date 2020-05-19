@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  lab:
+    image: pyspark-lab/image
+    container_name: pyspark-lab
+    build:
+      context: ./pyspark-lab
+      dockerfile: Dockerfile
+    volumes:
+      #  - ./notebooks/:/notebooks2
+      - /Users/amarch/workspace/traces_by_analytics/notebooks/:/notebooks
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=1
+    command: start-notebook.sh --NotebookApp.notebook_dir=/notebooks

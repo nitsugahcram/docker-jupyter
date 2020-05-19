@@ -1,0 +1,23 @@
+{
+    "@jupyterlab/apputils-extension:themes": {
+        "theme": "JupyterLab Dark"
+    },
+    "NotebookApp": {
+        "nbserver_extensions": {
+          "jupyterlab": true,
+          "jupyterlab_code_formatter": true,
+          "jupyterlab_git": true,
+          "jupyterlab_templates.extension": true
+        }
+    },
+    "@ryantam626/jupyterlab_code_formatter:settings": {
+        "preferences": {
+            "default_formatter": {
+                "python": [
+                    "isort",
+                    "yapf"
+                ]
+            }
+        }
+    }
+}
