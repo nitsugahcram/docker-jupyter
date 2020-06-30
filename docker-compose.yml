@@ -3,7 +3,7 @@ version: "3"
 services:
   lab:
     image: pyspark-lab/image
-    container_name: pyspark-lab
+    container_name: pysparklab
     build:
       context: ./pyspark-lab
       dockerfile: Dockerfile
@@ -16,16 +16,15 @@ services:
       - JUPYTER_ENABLE_LAB=1
     command: start-notebook.sh --NotebookApp.notebook_dir=/notebooks
   book:
-    image: base-notebook/image
-    container_name: notebook
+    image: notebook/image
+    container_name: pysparkbook
     build:
       context: ./base-notebook
       dockerfile: Dockerfile
     volumes:
-      #  - ./notebooks/:/notebooks2
       - /Users/amarch/workspace/traces_by_analytics/notebooks/:/notebooks
     environment:
-      - NOJUPYTER_ENABLE_LAB=1
+      - NO_JUPYTER_ENABLE_LAB=1
     ports:
       - "9001:9001"
       - "4040:4040"
