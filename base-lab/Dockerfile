@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install -y sudo
 RUN echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
 
 RUN apt-get update && apt-get install -y \
-        software-properties-common
+    software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install -y \
     python3.6 \
@@ -84,6 +84,7 @@ RUN jupyter labextension install @jupyterlab/git @jupyterlab/toc @ijmbarr/jupyte
     @telamonian/theme-darcula
 RUN pip3 install jupyterlab_templates
 RUN jupyter labextension install jupyterlab_templates
+RUN jupyter labextension install jupyterlab-execute-time
 RUN jupyter serverextension enable --py jupyterlab_templates
 
 RUN jupyter lab build -y && \

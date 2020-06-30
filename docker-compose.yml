@@ -15,3 +15,20 @@ services:
     environment:
       - JUPYTER_ENABLE_LAB=1
     command: start-notebook.sh --NotebookApp.notebook_dir=/notebooks
+  book:
+    image: base-notebook/image
+    container_name: notebook
+    build:
+      context: ./base-notebook
+      dockerfile: Dockerfile
+    volumes:
+      #  - ./notebooks/:/notebooks2
+      - /Users/amarch/workspace/traces_by_analytics/notebooks/:/notebooks
+    environment:
+      - NOJUPYTER_ENABLE_LAB=1
+    ports:
+      - "9001:9001"
+      - "4040:4040"
+      - "8000:8000"
+    command: start-notebook.sh --ip=* --port 9001 --NotebookApp.notebook_dir=workspaces/ --ResourceUseDisplay.track_cpu_percent=True
+    # command: start-notebook.sh --ip=* --NotebookApp.notebook_dir=/notebooks
