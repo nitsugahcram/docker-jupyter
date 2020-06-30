@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y \
     software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa
 RUN apt-get update && apt-get install -y \
-    python3.8 \
+    python3.6 \
     python3-pip
 RUN apt-get update && apt-get install -y \
     python3-distutils \
@@ -55,7 +55,7 @@ RUN apt-get update && apt-get install -y \
     curl git && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN python3.8 -m pip install pip
+RUN python3.6 -m pip install pip
 
 # Copy a script that we will use to correct permissions after running certain commands
 COPY fix-permissions /usr/local/bin/fix-permissions
@@ -69,11 +69,13 @@ RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashr
 # RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
 # RUN apt-get install --no-install-recommends -y nodejs && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.8 1
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+
 USER $NB_UID
 WORKDIR $HOME
 # Setup work directory for backward-compatibility
 RUN fix-permissions /home/${USER}
+
 RUN pip3 install -U pip
 RUN pip3 install -vU setuptools
 RUN pip3 install -U notebook 
@@ -87,7 +89,7 @@ RUN jupyter nbextension enable codefolding/main
 RUN jupyter nbextension enable spellchecker/main
 RUN jupyter nbextension enable collapsible_headings/main
 RUN jupyter nbextension enable snippets_menu/main
-RUN jupyter nbextension enable code_prettify/autopep8
+RUN jupyter nbextension enable code_prettify/code_prettify
 RUN jupyter nbextension enable code_prettify/isort
 RUN jupyter nbextension enable execute_time/ExecuteTime
 RUN jupyter nbextension enable zenmode/main
@@ -100,10 +102,10 @@ RUN jupyter nbextension enable rise/main
 RUN jupyter nbextension enable highlighter/highlighter
 RUN jupyter nbextension enable hide_input/main
 RUN jupyter nbextension enable move_selected_cells/main
+RUN jupyter nbextension enable hide_input_all/main
 RUN pip3 install -U jupyterthemes
 
-
-# EXPOSE 8888
+#
 # Copy local files as late as possible to avoid cache busting
 COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
 
@@ -132,12 +134,6 @@ RUN cd /tmp && \
     rm spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
 
-ENV SPARK_HOME=/usr/local/spark
-ENV PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9-src.zip \
-    # MESOS_NATIVE_LIBRARY=/usr/local/lib/libmesos.so \
-    SPARK_OPTS="--driver-java-options=-Xms4096M --driver-java-options=-Xmx8192M --driver-java-options=-Dlog4j.logLevel=info" \
-    PATH=$PATH:$SPARK_HOME/bin
-
 # COPY mesos.key /tmp/
 # RUN apt-get -y update && \
 #     apt-get install --no-install-recommends -y gnupg libcurl3 && \
@@ -147,6 +143,15 @@ ENV PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9-src.zip \
 #     apt-get --no-install-recommends -y install libcurl3 mesos=1.2\* && \
 #     apt-get purge --auto-remove -y gnupg && \
 #     rm -rf /var/lib/apt/lists/*
+
+# ENV SPARK_HOME=/usr/local/spark
+# ENV PATH=$PATH:${SPARK_HOME}/bin
+# Spark and Mesos config
+ENV SPARK_HOME=/usr/local/spark
+ENV PYTHONPATH=$SPARK_HOME/python:$SPARK_HOME/python/lib/py4j-0.10.9-src.zip:${HOME}/workspaces/ \
+    # MESOS_NATIVE_LIBRARY=/usr/local/lib/libmesos.so \
+    SPARK_OPTS="--driver-java-options=-Xms4096M --driver-java-options=-Xmx8192M --driver-java-options=-Dlog4j.logLevel=info" \
+    PATH=$PATH:$SPARK_HOME/bin
 
 # COPY spark-2.4.6-bin-hadoop2.7.tgz.sha512 spark-2.4.6-bin-hadoop2.7.tgz.sha512
 USER $NB_UID
