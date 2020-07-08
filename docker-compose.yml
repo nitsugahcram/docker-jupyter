@@ -1,6 +1,14 @@
 version: "3"
 
 services:
+  book_image:
+    build:
+      context: base-notebook/
+      dockerfile: Dockerfile
+    image: notebook:local
+    container_name: pysparkbook
+    entrypoint: ["bash"]
+    command: ""
   lab:
     image: pyspark-lab/image
     container_name: pysparklab
@@ -16,13 +24,10 @@ services:
       - JUPYTER_ENABLE_LAB=1
     command: start-notebook.sh --NotebookApp.notebook_dir=/notebooks
   book:
-    image: notebook/image
+    image: notebook:local
     container_name: pysparkbook
-    build:
-      context: ./base-notebook
-      dockerfile: Dockerfile
     volumes:
-      - /Users/amarch/workspace/traces_by_analytics/notebooks/:/notebooks
+      - /Users/amarch/workspace/traces_by_analytics/:/home/analytics/workspaces/
     environment:
       - NO_JUPYTER_ENABLE_LAB=1
     ports:
@@ -30,4 +35,3 @@ services:
       - "4040:4040"
       - "8000:8000"
     command: start-notebook.sh --ip=* --port 9001 --NotebookApp.notebook_dir=workspaces/ --ResourceUseDisplay.track_cpu_percent=True
-    # command: start-notebook.sh --ip=* --NotebookApp.notebook_dir=/notebooks
