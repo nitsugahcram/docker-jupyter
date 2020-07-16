@@ -1,0 +1,54 @@
+{
+    "LabApp": {
+        "tornado_settings": {
+            "page_config_data": {
+                "buildCheck": false,
+                "buildAvailable": false
+            }
+        }
+    },
+    "@jupyterlab/apputils-extension:themes": {
+        "theme": "JupyterLab Dark"
+    },
+    "@ryantam626/jupyterlab_code_formatter:settings": {
+        "preferences": {
+            "default_formatter": {
+                "python": [
+                    "isort",
+                    "yapf"
+                ]
+            }
+        }
+    },
+    "@jupyterlab/shortcuts-extension": {
+        "shortcuts": {
+            "command": "jupyterlab_code_formatter:yapf",
+            "keys": [
+                "Ctrl k",
+                "Ctrl m"
+            ],
+            "selector": ".jp-Notebook.jp-mod-editMode"
+        }
+    },
+    "@jupyterlab/toc:plugin": {
+        "collapsibleNotebooks": true
+    },
+    "@jupyterlab/notebook-extension:tracker": {
+        "codeCellConfig": {
+            "autoClosingBrackets": true,
+            "fontFamily": null,
+            "fontSize": null,
+            "lineHeight": null,
+            "lineNumbers": true,
+            "lineWrap": "off",
+            "matchBrackets": true,
+            "readOnly": false,
+            "insertSpaces": true,
+            "tabSize": 4,
+            "wordWrapColumn": 80,
+            "rulers": [],
+            "codeFolding": true,
+            "lineWiseCopyCut": true
+        }
+    }
+}

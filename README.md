@@ -1,26 +1,26 @@
 # docker-jupyterlab
 
-The intent is to generate a docker image with Jupyter lab, without conda.
+The intent is to generate a docker image with Jupyter Notebook, and PySpark without conda.
 
 This project is base on https://github.com/jupyter/docker-stacks/,
 
-# Jupyter Docker Stacks
-
-Jupyter Docker Stacks are a set of ready-to-run [Docker images](https://hub.docker.com/u/jupyter)
-containing Jupyter applications and interactive computing tools.
-
 ## Images
 
-- base-lab:
+- base-notebook:
+    - Docker image with Spark 3.0
 - pyspark-lab:
-
+    * base on the https://github.com/jupyter/docker-stacks/ for Jupyter lab with Spark 2.4.5.
 
 ## Quick Start
 
-You can try a
-[recent build of the jupyter/base-notebook image on mybinder.org](https://mybinder.org/v2/gh/jupyter/docker-stacks/master?filepath=README.ipynb)
-by simply clicking the preceding link. Otherwise, the two examples below may help you get started if
-you [have Docker installed](https://docs.docker.com/install/) know
-[which Docker image](http://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html) you
-want to use, and want to launch a single Jupyter Notebook server in a container.
+### For Notebook
+```bash
+docker-compose build book_image
+docker-compose up book
+```
 
+### For Jupyter Lab
+```bash
+docker-compose build lab_image
+docker-compose up lab
+```

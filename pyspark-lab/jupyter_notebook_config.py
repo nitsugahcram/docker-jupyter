@@ -20,6 +20,14 @@ c.JupyterLabTemplates.template_dirs = ['notebooks/template', 'notebooks_template
 c.JupyterLabTemplates.include_default = True
 c.JupyterLabTemplates.include_core_paths = True
 
+# c.NotebookApp.nbserver_extensions = {
+#     '': True,
+# }
+
+# c.NotebookApp.ResourceUseDisplay.mem_limit = 67108864
+# c.NotebookApp.ResourceUseDisplay.track_cpu_percent = True
+# c.NotebookApp.ResourceUseDisplay.cpu_limit = 8
+
 # # Generate a self-signed certificate
 # if 'GEN_CERT' in os.environ:
 #     dir_name = jupyter_data_dir()

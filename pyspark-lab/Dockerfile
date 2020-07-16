@@ -112,19 +112,20 @@ COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
 USER root
 
 # Spark dependencies
-ENV APACHE_SPARK_VERSION=2.4.5 \
-    HADOOP_VERSION=2.7
+ENV APACHE_SPARK_VERSION=3.0.0 \
+    HADOOP_VERSION=3.2
 
 ## Install Java RE 8 for compatibility with SPARK 2.4
 RUN apt-get -y update && \
-    apt-get install --no-install-recommends -y openjdk-8-jre-headless ca-certificates-java wget && \
+    apt-get install --no-install-recommends -y openjdk-11-jre-headless ca-certificates-java wget && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Using the preferred mirror to download the file
 RUN cd /tmp && \
     wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz\?as_json | \
     python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
-    echo "2426a20c548bdfc07df288cd1d18d1da6b3189d0b78dee76fa034c52a4e02895f0ad460720c526f163ba63a17efae4764c46a1cd8f9b04c60f9937a554db85d2 *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
+    echo "BFE45406C67CC4AE00411AD18CC438F51E7D4B6F14EB61E7BF6B5450897C2E8D3AB020152657C0239F253735C263512FFABF538AC5B9FFFA38B8295736A9C387 *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
+    # echo "2426a20c548bdfc07df288cd1d18d1da6b3189d0b78dee76fa034c52a4e02895f0ad460720c526f163ba63a17efae4764c46a1cd8f9b04c60f9937a554db85d2 *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
     tar xzf spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz -C /usr/local --owner root --group root --no-same-owner && \
     rm spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 RUN cd /usr/local && ln -s spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark
@@ -157,12 +158,14 @@ USER $NB_UID
 # COPY kernel.json /home/${USER}/.local/share/jupyter/kernels/pyspark/
 # RUN jupyter labextension install jupyterlab_spark
 RUN jupyter lab build -y && \
-    jupyter lab clean -y && \
-    npm cache clean --force && \
-    rm -rf /home/$NB_USER/.cache/yarn && \
-    rm -rf /home/$NB_USER/.node-gyp 
-
-
+    jupyter lab clean -y
+# && \
+#    npm cache clean --force && \
+#    rm -rf /home/$NB_USER/.cache/yarn && \
+#    rm -rf /home/$NB_USER/.node-gyp 
+# RUN pip3 install pyarrow
+# RUN fix-permissions /home/${USER}/.local/share/jupyter/kernels/
+# RUN python3 -m ipykernel install --user
 EXPOSE 9001
 EXPOSE 4040
 EXPOSE 8000

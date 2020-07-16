@@ -3,18 +3,23 @@ version: "3"
 services:
   book_image:
     build:
-      context: base-notebook/
+      context: pyspark-notebook/
       dockerfile: Dockerfile
     image: notebook:local
     container_name: pysparkbook
     entrypoint: ["bash"]
     command: ""
-  lab:
-    image: pyspark-lab/image
-    container_name: pysparklab
+  lab_image:
     build:
-      context: ./pyspark-lab
+      context: pyspark-lab/
       dockerfile: Dockerfile
+    image: lab:local
+    container_name: pysparklab
+    entrypoint: ["bash"]
+    command: ""
+  lab:
+    image: lab:local
+    container_name: pysparklab
     volumes:
       #  - ./notebooks/:/notebooks2
       - /Users/amarch/workspace/traces_by_analytics/notebooks/:/notebooks
