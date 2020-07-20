@@ -1,6 +1,6 @@
-# docker-jupyterlab
+# docker-jupyter
 
-The intent is to generate a docker image with Jupyter Notebook, and PySpark without conda.
+The intent is to generate a docker image with Jupyter Notebook, Lab with PySpark without conda.
 
 This project is base on https://github.com/jupyter/docker-stacks/,
 
@@ -13,7 +13,7 @@ This project is base on https://github.com/jupyter/docker-stacks/,
 
 ## Quick Start
 
-### For Notebook
+### For Jupyter Notebook
 ```bash
 docker-compose build book_image
 docker-compose up book
